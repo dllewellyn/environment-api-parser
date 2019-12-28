@@ -1,0 +1,5 @@
+profile: cli
+defaultPackage: environment.api.parser
+---
+testFramework: junit
+sourceLanguage: kotlin
