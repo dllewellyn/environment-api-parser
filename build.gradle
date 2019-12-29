@@ -23,6 +23,8 @@ configurations {
 
 dependencies {
     annotationProcessor "io.micronaut.configuration:micronaut-picocli"
+    implementation platform('software.amazon.awssdk:bom:2.5.29')
+    implementation "com.amazonaws:aws-java-sdk-dynamodb:1.11.699"
     implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
     implementation "io.micronaut:micronaut-runtime"
     implementation "info.picocli:picocli"
