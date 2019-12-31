@@ -1,3 +1,4 @@
 micronaut:
   application:
     name: environment-api-parser
+recycling_table_name: edi-recycling-points
