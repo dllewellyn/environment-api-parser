@@ -30,6 +30,9 @@ class EnvironmentApiParserCommand : Runnable {
     @Option(names = ["-c", "--clear"], description = ["..."])
     private var clear: Boolean = false
 
+    @Option(names = ["--list-categories"], description = ["List all categories"])
+    private var listCategories: Boolean = false
+
     @Inject
     private lateinit var wasteParser: EdinburghWasteParser
 
@@ -75,6 +78,13 @@ class EnvironmentApiParserCommand : Runnable {
                     }
                 }
                 uploader.upload("environment-app", mappedData.values.toList())
+            }
+
+            if (listCategories) {
+                dynamoDbDownloader.download().map {
+                    it.type
+                }.toSet()
+                        .forEach(::println)
             }
         }
     }
