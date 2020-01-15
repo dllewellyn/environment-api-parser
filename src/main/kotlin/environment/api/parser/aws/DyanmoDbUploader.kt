@@ -6,8 +6,8 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest
+import com.environment.app.DataType
 import environment.api.parser.waste.DataPointApi
-import environment.api.parser.waste.DataType
 
 open class DyanmoDbUploader {
 

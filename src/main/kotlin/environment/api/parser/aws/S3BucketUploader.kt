@@ -5,9 +5,9 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.model.CannedAccessControlList
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
+import com.environment.app.DataPoint
 import com.fasterxml.jackson.databind.ObjectMapper
 import environment.api.parser.interfaces.ListUploader
-import environment.api.parser.waste.DataPoint
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.OutputStreamWriter

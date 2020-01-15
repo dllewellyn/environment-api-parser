@@ -1,5 +1,6 @@
 package environment.api.parser.waste
 
+import com.environment.app.DataType
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.RxHttpClient
 import io.micronaut.http.client.annotation.Client

@@ -1,18 +1,17 @@
 package environment.api.parser
 
+import com.environment.app.DataPoint
 import environment.api.parser.interfaces.Downloader
 import environment.api.parser.interfaces.ListUploader
 import environment.api.parser.interfaces.Uploader
-import environment.api.parser.waste.EdinburghWasteParser
-import environment.api.parser.waste.DataPoint
 import environment.api.parser.waste.DataPointApi
+import environment.api.parser.waste.EdinburghWasteParser
 import io.micronaut.configuration.picocli.PicocliRunner
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-
 import picocli.CommandLine.Command
 import picocli.CommandLine.Option
 import javax.inject.Inject
@@ -26,9 +25,6 @@ class EnvironmentApiParserCommand : Runnable {
 
     @Option(names = ["-r", "--recyclingPoints"], description = ["..."])
     private var recyclingPoints: Boolean = false
-
-    @Option(names = ["-c", "--clear"], description = ["..."])
-    private var clear: Boolean = false
 
     @Option(names = ["--list-categories"], description = ["List all categories"])
     private var listCategories: Boolean = false
