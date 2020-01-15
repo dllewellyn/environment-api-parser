@@ -4,8 +4,8 @@ import environment.api.parser.interfaces.Downloader
 import environment.api.parser.interfaces.ListUploader
 import environment.api.parser.interfaces.Uploader
 import environment.api.parser.waste.EdinburghWasteParser
-import environment.api.parser.waste.RecyclingPoint
-import environment.api.parser.waste.RecyclingPointApi
+import environment.api.parser.waste.DataPoint
+import environment.api.parser.waste.DataPointApi
 import io.micronaut.configuration.picocli.PicocliRunner
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
@@ -37,13 +37,13 @@ class EnvironmentApiParserCommand : Runnable {
     private lateinit var wasteParser: EdinburghWasteParser
 
     @Inject
-    private lateinit var uploader: ListUploader<RecyclingPoint>
+    private lateinit var uploader: ListUploader<DataPoint>
 
     @Inject
-    private lateinit var dynamoDbUploader: Uploader<RecyclingPointApi>
+    private lateinit var dynamoDbUploader: Uploader<DataPointApi>
 
     @Inject
-    private lateinit var dynamoDbDownloader: Downloader<RecyclingPointApi>
+    private lateinit var dynamoDbDownloader: Downloader<DataPointApi>
 
     @ExperimentalStdlibApi
     override fun run() {
@@ -60,7 +60,7 @@ class EnvironmentApiParserCommand : Runnable {
             }
 
             if (synchronise) {
-                val mappedData = mutableMapOf<String, RecyclingPoint>()
+                val mappedData = mutableMapOf<String, DataPoint>()
                 dynamoDbDownloader.download().forEach { recyclingPoint ->
 
                     mappedData[recyclingPoint.locationUid()] = if (mappedData.containsKey(recyclingPoint.locationUid())) {
@@ -70,11 +70,12 @@ class EnvironmentApiParserCommand : Runnable {
                             })
                         } ?: throw IllegalAccessError()
                     } else {
-                        RecyclingPoint(recyclingPoint.name,
+                        DataPoint(recyclingPoint.name,
                                 recyclingPoint.description,
                                 listOf(recyclingPoint.type),
                                 recyclingPoint.latitude,
-                                recyclingPoint.longitude)
+                                recyclingPoint.longitude,
+                                recyclingPoint.dataType)
                     }
                 }
                 uploader.upload("environment-app", mappedData.values.toList())

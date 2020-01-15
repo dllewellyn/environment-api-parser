@@ -5,10 +5,9 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest
-import com.amazonaws.services.dynamodbv2.model.GetItemRequest
 import com.amazonaws.services.dynamodbv2.model.PutItemRequest
-import environment.api.parser.waste.RecyclingPointApi
+import environment.api.parser.waste.DataPointApi
+import environment.api.parser.waste.DataType
 
 open class DyanmoDbUploader {
 
@@ -28,16 +27,18 @@ open class DyanmoDbUploader {
 
     }
 
-    fun download(tableName: String): List<RecyclingPointApi> =
+    fun download(tableName: String): List<DataPointApi> =
             DynamoDB(dynamodbClient).getTable(tableName)
                     .scan()
                     .toList()
                     .map {
-                        RecyclingPointApi(it.getString("name"),
+                        DataPointApi(it.getString("name"),
                                 it.getString("description"),
                                 it.getString("type"),
                                 it.getDouble("latitude"),
-                                it.getDouble("longitude"))
+                                it.getDouble("longitude"),
+                                DataType.valueOf(it.getString("dataType").toUpperCase())
+                        )
                     }
 
 }
