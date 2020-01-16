@@ -4,8 +4,9 @@ import com.environment.app.DataPoint
 import environment.api.parser.interfaces.Downloader
 import environment.api.parser.interfaces.ListUploader
 import environment.api.parser.interfaces.Uploader
-import environment.api.parser.waste.DataPointApi
-import environment.api.parser.waste.EdinburghWasteParser
+import environment.api.parser.parser.DataPointApi
+import environment.api.parser.parser.EdinburghWasteParser
+import environment.api.parser.parser.PlasticFreeShopParser
 import io.micronaut.configuration.picocli.PicocliRunner
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
@@ -29,6 +30,9 @@ class EnvironmentApiParserCommand : Runnable {
     @Option(names = ["--list-categories"], description = ["List all categories"])
     private var listCategories: Boolean = false
 
+    @Option(names = ["--shops"], description = ["Synchronise shops data"])
+    private var synchroniseShops: Boolean = false
+
     @Inject
     private lateinit var wasteParser: EdinburghWasteParser
 
@@ -41,6 +45,9 @@ class EnvironmentApiParserCommand : Runnable {
     @Inject
     private lateinit var dynamoDbDownloader: Downloader<DataPointApi>
 
+    @Inject
+    private lateinit var plasticFreeShopParser: PlasticFreeShopParser
+
     @ExperimentalStdlibApi
     override fun run() {
         runBlocking {
@@ -48,7 +55,15 @@ class EnvironmentApiParserCommand : Runnable {
 
             if (recyclingPoints) {
 
-                wasteParser.parse().toList().asFlow()
+                wasteParser.parse()
+                        .onEach {
+                            dynamoDbUploader.uploadSingleItem(it)
+                        }
+                        .collect()
+            }
+
+            if (synchroniseShops) {
+                plasticFreeShopParser.parse()
                         .onEach {
                             dynamoDbUploader.uploadSingleItem(it)
                         }

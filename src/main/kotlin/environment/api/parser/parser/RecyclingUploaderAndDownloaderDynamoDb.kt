@@ -1,4 +1,4 @@
-package environment.api.parser.waste
+package environment.api.parser.parser
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import environment.api.parser.aws.DyanmoDbUploader

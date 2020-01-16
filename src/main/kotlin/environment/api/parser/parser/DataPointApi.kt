@@ -1,4 +1,4 @@
-package environment.api.parser.waste
+package environment.api.parser.parser
 
 import com.environment.app.DataType
 
